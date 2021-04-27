@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./frontend/src:/home/node/app/frontend/src
+    container_name: frontend
+    expose:
+      - '3000'
+      - '24678'
+    ports:
+      - '3000:3000'
+      - '24678:24678'
+    command: yarn dev
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./backend/src:/home/node/app/backend/src
+    container_name: backend
+    expose:
+      - '3001'
+    ports:
+      - '3001:3001'
+    environment:
+      DB_CONNECTION_STRING: mongodb://mongo:27017/app
+    command: yarn dev
+
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/db:/data/db

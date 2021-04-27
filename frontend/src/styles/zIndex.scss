@@ -1,0 +1,62 @@
+// Intervals (from, to)
+$z-index-intervals: (
+  content: (0, 99),
+  popover: (100, 199),
+  overlay: (200, 299),
+  notification: (300, 399),
+);
+
+/*
+    Returns the z-index for an interval
+    @param {string} intervalName - interval name
+    @param {number} value - relative z-index
+ */
+@function _z-index($intervalName, $value) {
+  $start: nth(map_get($z-index-intervals, $intervalName), 1);
+  $end: nth(map_get($z-index-intervals, $intervalName), 2);
+  $computedValue: $start + $value;
+
+  @if ($computedValue < $start or $computedValue > $end) {
+    @error 'Interval value "#{$intervalName}" must be between 0 and #{$end - $start}';
+  }
+
+  @return $computedValue;
+}
+
+/*
+    Returns the z-index for an content
+    Used for anything that does not expand above the page
+    @param {number} value - relative z-index
+ */
+@function z-index-content($value: 0) {
+  @return _z-index(content, $value);
+}
+
+/*
+    Returns the z-index for an popover
+    Used for tooltips, pop-ups, dropdowns, and other items that pop up on hover or click
+    @param {number} value - relative z-index
+ */
+@function z-index-popover($value: 0) {
+  @return _z-index(popover, $value);
+}
+
+/*
+    Returns the z-index for overlapping page elements
+    Used for modals, loading overlays and anything that overlaps the page content
+    @param {number} value - relative z-index
+ */
+@function z-index-overlay($value: 0) {
+  @return _z-index(overlay, $value);
+}
+
+/*
+    Returns the z-index for notifications
+    Used for notifications in the corner of the screen and elements
+    that should be accurately noticed by the user
+    regardless of what is happening on the page
+    @param {number} value - relative z-index
+ */
+@function z-index-notification($value: 0) {
+  @return _z-index(notification, $value);
+}
