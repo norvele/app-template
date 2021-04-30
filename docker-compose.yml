@@ -14,7 +14,7 @@ services:
       - '24678'
     ports:
       - '3000:3000'
-      - '24678:24678'
+      - '24678:24678' # Vite dev server websocket for hot reload
     command: yarn dev
 
   backend:
@@ -31,6 +31,12 @@ services:
       - '3001:3001'
     environment:
       DB_CONNECTION_STRING: mongodb://mongo:27017/app
+      # Get smtp credentials from https://ethereal.email/
+      MAIL_HOST: smtp.ethereal.email
+      MAIL_PORT: 587
+      MAIL_USER: caleb1@ethereal.email
+      MAIL_PASS: pwzhJXhurRkGv3pVDv
+      MAIL_FROM: caleb1@ethereal.email
     command: yarn dev
 
   mongo:
